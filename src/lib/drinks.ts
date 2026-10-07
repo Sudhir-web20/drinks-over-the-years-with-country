@@ -1,4 +1,4 @@
-const images = import.meta.glob<string>('../assets/drinks/*.webp', { eager: true, query: '?url', import: 'default' });
+const images = import.meta.glob<string>('../assets/drinks/*.png', { eager: true, query: '?url', import: 'default' });
 export type Category = 'Beer' | 'Soft drinks' | 'Water' | 'Juice' | 'Energy & sports' | 'Cultured';
 export type Drink = { id: string; name: string; year: number; country: string; flag: string; category: Category; type: string; taste: string; story: string; fact: string; image: string; number: number };
 const rows: [string,string,number,string,string,Category,string,string,string,string][] = [
@@ -28,5 +28,5 @@ const rows: [string,string,number,string,string,Category,string,string,string,st
 ['powerade','Powerade',1988,'United States','🇺🇸','Energy & sports','Sports drink','Fruit · Sweet · Refreshing','The Coca-Cola Company launched Powerade as a sports beverage with carbohydrates and electrolytes.','Its colorful range became closely associated with major sporting events.'],
 ['monster-energy','Monster Energy',2002,'United States','🇺🇸','Energy & sports','Energy drink','Bold · Sweet · Citrus','Hansen Natural launched Monster Energy, pairing a distinctive claw-mark identity with music and action-sports culture.','Its black can and vivid green claw logo became its visual signature.'],
 ];
-export const drinks: Drink[] = rows.map(([id,name,year,country,flag,category,type,taste,story,fact],i)=>({id,name,year,country,flag,category,type,taste,story,fact,number:i+1,image:images[`../assets/drinks/${id}.webp`] ?? ''}));
+export const drinks: Drink[] = rows.map(([id,name,year,country,flag,category,type,taste,story,fact],i)=>({id,name,year,country,flag,category,type,taste,story,fact,number:i+1,image:images[`../assets/drinks/${id}.png`] ?? ''}));
 export const categories = ['All drinks','Soft drinks','Beer','Water','Juice','Energy & sports','Cultured'] as const;

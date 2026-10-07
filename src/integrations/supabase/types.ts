@@ -14,7 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      drink_ai_cache: {
+        Row: {
+          blocked_message: string | null
+          blocked_status: number | null
+          drink_id: string
+          story: string | null
+          updated_at: string
+        }
+        Insert: {
+          blocked_message?: string | null
+          blocked_status?: number | null
+          drink_id: string
+          story?: string | null
+          updated_at?: string
+        }
+        Update: {
+          blocked_message?: string | null
+          blocked_status?: number | null
+          drink_id?: string
+          story?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

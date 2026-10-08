@@ -112,7 +112,8 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
     if (phase !== 'tour' || !step?.target) { setRect(null); return; }
     const el = document.querySelector<HTMLElement>(step.target);
     if (!el) { setRect(null); return; }
-    el.scrollIntoView({ block: narrow ? 'start' : 'center', inline: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    const tall = el.offsetHeight > window.innerHeight * .5;
+    el.scrollIntoView({ block: narrow && tall ? 'start' : 'center', inline: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     measure();
     let frame = 0;
     let frames = 0;

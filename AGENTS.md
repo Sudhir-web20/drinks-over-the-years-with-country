@@ -14,3 +14,4 @@
 - Use bundled individual generated product images for collection and detail views so assets work without third-party hotlinks.
 - Put AI calls in client-safe server function declarations backed by server-only helpers; never expose prompts or credentials to the browser.
 - Use semantic global CSS tokens and existing UI controls, with Framer Motion respecting reduced-motion preferences.
+- Keep first-visit guidance in a dedicated tour component that anchors to real controls via data-tour attributes, so onboarding follows the live UI instead of static screenshots.

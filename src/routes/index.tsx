@@ -1,11 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
-import { ArrowDown, ArrowDownUp, ArrowUpRight, Droplets, Grid2X2, List, Search, Sparkles, X, Clock3, Globe2, Leaf } from 'lucide-react';
+import { ArrowDown, ArrowDownUp, ArrowUpRight, CircleHelp, Clock3, Droplets, Globe2, Grid2X2, Leaf, List, Search, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { categories, drinks, type Drink } from '@/lib/drinks';
 import { getDrinkStory } from '@/lib/drink-story.functions';
+import { OnboardingTour } from '@/components/onboarding-tour';
 
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
@@ -25,16 +26,20 @@ function DrinksArchive() {
   const [reverse, setReverse] = useState(false);
   const [view, setView] = useState<'collection'|'timeline'>('collection');
   const [selected, setSelected] = useState<Drink|null>(null);
+  const [replay, setReplay] = useState(0);
   const filtered = useMemo(()=>drinks.filter(d => (category==='All drinks'||d.category===category) && `${d.name} ${d.country} ${d.type} ${d.year}`.toLowerCase().includes(search.toLowerCase())).sort((a,b)=>reverse ? b.year-a.year : a.year-b.year),[category,search,reverse]);
   const reset = () => {setCategory('All drinks');setSearch('');setReverse(false);};
   return <MotionConfig reducedMotion="user"><div className="archive">
     <header className="site-header page-width">
       <a href="/" className="wordmark" aria-label="Sip home"><Droplets aria-hidden="true"/>sip<span>.</span></a>
-      <nav aria-label="Archive views" className="main-nav">
+      <nav aria-label="Archive views" className="main-nav" data-tour="views">
         <Button variant="ghost" className={view==='collection'?'nav-item active':'nav-item'} onClick={()=>setView('collection')}>Collection</Button>
         <Button variant="ghost" className={view==='timeline'?'nav-item active':'nav-item'} onClick={()=>setView('timeline')}>Timeline</Button>
       </nav>
-      <span className="header-note"><span className="status-dot"/> A little history. A lot of flavor.</span>
+      <div className="header-right">
+        <Button variant="ghost" className="tour-replay" onClick={()=>setReplay(r=>r+1)}><CircleHelp size={14}/> Tour</Button>
+        <span className="header-note"><span className="status-dot"/> A little history. A lot of flavor.</span>
+      </div>
     </header>
     <main className="page-width">
       <section className="intro">
@@ -47,22 +52,23 @@ function DrinksArchive() {
         <div className="archive-stats"><div><strong>25<span>↗</span></strong><small>ICONIC DRINKS</small></div><div><strong>243</strong><small>YEARS OF HISTORY</small></div><div className="stats-period">1759 <span>—</span> 2002</div></div>
       </section>
       <section id="collection" className="collection-section">
-        <div className="collection-heading"><div><h2>{view==='collection'?'The collection':'Through the years'} <span>{String(filtered.length).padStart(2,'0')}</span></h2><p>A taste of history, from oldest to newest.</p></div><div className="display-controls"><span className="display-label">VIEW</span><Button variant="ghost" size="icon" aria-label="Mosaic view" title="Mosaic view" onClick={()=>setView('collection')} className={view==='collection'?'view-button active':'view-button'}><Grid2X2/></Button><Button variant="ghost" size="icon" aria-label="Timeline view" title="Timeline view" onClick={()=>setView('timeline')} className={view==='timeline'?'view-button active':'view-button'}><List/></Button></div></div>
-        <div className="collection-toolbar"><div className="category-tabs" aria-label="Filter drinks">{categories.map(c=><Button key={c} variant="ghost" aria-pressed={category===c} className={`category-tab ${category===c?'selected':''}`} onClick={()=>setCategory(c)}>{c}{c==='All drinks'&&<span>25</span>}</Button>)}</div><div className="search-sort"><label className="search-box"><Search size={16}/><input aria-label="Search drinks" placeholder="Find your drink..." value={search} onChange={e=>setSearch(e.target.value)}/>{search&&<Button variant="ghost" size="icon" aria-label="Clear search" onClick={()=>setSearch('')}><X/></Button>}</label><Button variant="ghost" size="icon" title={reverse?'Newest first':'Oldest first'} aria-label={reverse?'Sort oldest first':'Sort newest first'} onClick={()=>setReverse(!reverse)}><ArrowDownUp/></Button></div></div>
+        <div className="collection-heading"><div><h2>{view==='collection'?'The collection':'Through the years'} <span>{String(filtered.length).padStart(2,'0')}</span></h2><p>A taste of history, from oldest to newest.</p></div><div className="display-controls" data-tour="layout"><span className="display-label">VIEW</span><Button variant="ghost" size="icon" aria-label="Mosaic view" title="Mosaic view" onClick={()=>setView('collection')} className={view==='collection'?'view-button active':'view-button'}><Grid2X2/></Button><Button variant="ghost" size="icon" aria-label="Timeline view" title="Timeline view" onClick={()=>setView('timeline')} className={view==='timeline'?'view-button active':'view-button'}><List/></Button></div></div>
+        <div className="collection-toolbar"><div className="category-tabs" aria-label="Filter drinks" data-tour="filters">{categories.map(c=><Button key={c} variant="ghost" aria-pressed={category===c} className={`category-tab ${category===c?'selected':''}`} onClick={()=>setCategory(c)}>{c}{c==='All drinks'&&<span>25</span>}</Button>)}</div><div className="search-sort"><label className="search-box" data-tour="search"><Search size={16}/><input aria-label="Search drinks" placeholder="Find your drink..." value={search} onChange={e=>setSearch(e.target.value)}/>{search&&<Button variant="ghost" size="icon" aria-label="Clear search" onClick={()=>setSearch('')}><X/></Button>}</label><Button variant="ghost" size="icon" data-tour="sort" title={reverse?'Newest first':'Oldest first'} aria-label={reverse?'Sort oldest first':'Sort newest first'} onClick={()=>setReverse(!reverse)}><ArrowDownUp/></Button></div></div>
         <motion.div layout className={view==='collection'?'drink-grid':'timeline-list'}>
-          <AnimatePresence mode="popLayout">{filtered.map((drink,i)=><DrinkCard key={drink.id} drink={drink} featured={view==='collection'&&i===0&&!search&&category==='All drinks'} view={view} onOpen={()=>setSelected(drink)}/>)}</AnimatePresence>
+          <AnimatePresence mode="popLayout">{filtered.map((drink,i)=><DrinkCard key={drink.id} drink={drink} featured={view==='collection'&&i===0&&!search&&category==='All drinks'} view={view} tour={view==='collection'&&i===0&&!search&&category==='All drinks'?'card':undefined} onOpen={()=>setSelected(drink)}/>)}</AnimatePresence>
         </motion.div>
         {!filtered.length&&<div className="empty-state"><Search size={30}/><h3>No drinks found</h3><p>Nothing in the archive matches “{search}”.</p><Button variant="outline" onClick={reset}>Clear filters</Button></div>}
         <div className="collection-end"><span className="tiny-line"/><span>{filtered.length===25?'25 icons. Countless stories.':`${filtered.length} drinks in this selection.`}</span><span className="tiny-line"/></div>
       </section>
     </main>
     <footer className="page-width site-footer"><a href="/" className="footer-brand">sip.</a><span>Good taste has a history.</span><span className="footer-note">AN INDEPENDENT DRINKS ARCHIVE · EST. 2026</span></footer>
+    <OnboardingTour replay={replay} onPrepare={()=>{setView('collection');reset();setSelected(null);}} onOpenFeatured={()=>setSelected(drinks[0] ?? null)}/>
     <Dialog open={selected!==null} onOpenChange={open=>{if(!open)setSelected(null);}}>{selected&&<DrinkDetails key={selected.id} drink={selected}/>}</Dialog>
   </div></MotionConfig>;
 }
 
-function DrinkCard({drink,featured,view,onOpen}:{drink:Drink;featured:boolean;view:string;onOpen:()=>void}) {
-  return <motion.div layout initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} exit={{opacity:0,scale:.97}} transition={{duration:.3}} className={`drink-tile tone-${drink.number%5} ${featured?'featured':''} ${view==='timeline'?'timeline-tile':''}`}>
+function DrinkCard({drink,featured,view,tour,onOpen}:{drink:Drink;featured:boolean;view:string;tour?:string|undefined;onOpen:()=>void}) {
+  return <motion.div layout data-tour={tour} initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} exit={{opacity:0,scale:.97}} transition={{duration:.3}} className={`drink-tile tone-${drink.number%5} ${featured?'featured':''} ${view==='timeline'?'timeline-tile':''}`}>
     <Button variant="ghost" className="drink-card" onClick={onOpen} aria-label={`Explore ${drink.name}`}>
       <div className="tile-top"><span className="drink-category">{featured&&<span className="featured-label"><span/>THE ORIGINAL ICON</span>}{!featured&&drink.type}</span><span className="index-number">{String(drink.number).padStart(2,'0')} / 25</span></div>
       <span className="year-watermark" aria-hidden="true">{drink.year}</span>

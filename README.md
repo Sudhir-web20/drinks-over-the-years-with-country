@@ -1,29 +1,35 @@
-# Welcome to your Lovable project
+# 🥤 Sip — 25 Iconic Drinks Through History
 
-This project was built with [Lovable](https://lovable.dev).
+An interactive, animated archive of 25 of the world's most famous drinks — from Guinness (1759) to Monster Energy (2002) — with their country of origin, taste notes, little-known facts, and AI-written stories.
 
-## Build with Lovable
+## ✨ Features
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+- **Curated mosaic collection** of 25 iconic drinks with product images
+- **Timeline view** — travel from 1759 to 2002, oldest to newest
+- **Filters & search** — soft drinks, beer, water, juice, energy & sports, cultured
+- **Animated detail cards** (Framer Motion) with origin, taste notes and fun facts
+- **AI drink stories** generated on demand and cached
+- Accessible: respects reduced-motion preferences, works on mobile
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## 🍺 The 25 drinks
 
-## Development
+Guinness · Schweppes · Evian · Carlsberg · Perrier · Heineken · Budweiser · Dr Pepper · Coca-Cola · Pepsi · S.Pellegrino · Canada Dry · Corona · Stella Artois · 7UP · Yakult · Fanta · Mountain Dew · Minute Maid · Tropicana · Sprite · Gatorade · Red Bull · Powerade · Monster Energy
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## 🛠 Built with
+
+TanStack Start · React 19 · TypeScript · Tailwind CSS v4 · Framer Motion · Lovable Cloud · Lovable AI
+
+## 🚀 Run locally
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git clone https://github.com/Sudhir-web20/drinks-over-the-years-with-country.git
+cd drinks-over-the-years-with-country
 npm i
 npm run dev
 ```
 
-## Built with
+## 🤝 Contributing
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+Ideas, new drinks, and fixes are welcome — open an issue or pull request. If you like the project, please ⭐ star the repo!
+
+Built with [Lovable](https://lovable.dev).

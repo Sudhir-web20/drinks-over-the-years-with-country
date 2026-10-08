@@ -60,7 +60,7 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
   const [narrow, setNarrow] = useState(false);
-  const step = steps[index];
+  const step: TourStep = steps[index] ?? { target: '', title: '', body: '' };
   const prepareRef = useRef(onPrepare);
   const openRef = useRef(onOpenFeatured);
   prepareRef.current = onPrepare;
@@ -196,19 +196,16 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
           : { opacity: 0, top: 0, left: 0, width: 0, height: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 34, mass: .7 }}
       />
-      <AnimatePresence mode="wait">
+      <div className="tour-panel" style={panelStyle()}>
         <motion.div
           key={index}
           ref={focusPanel}
-          className="tour-panel"
-          style={panelStyle()}
           role="dialog"
           aria-modal="true"
           aria-label={step.title}
           tabIndex={-1}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
           transition={{ duration: .22 }}
         >
           <div className="tour-panel-head">
@@ -233,7 +230,7 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
             </Button>
           </div>
         </motion.div>
-      </AnimatePresence>
+      </div>
     </>}
   </AnimatePresence>;
 }

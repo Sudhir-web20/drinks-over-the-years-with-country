@@ -62,12 +62,12 @@ function DrinksArchive() {
       </section>
     </main>
     <footer className="page-width site-footer"><a href="/" className="footer-brand">sip.</a><span>Good taste has a history.</span><span className="footer-note">AN INDEPENDENT DRINKS ARCHIVE · EST. 2026</span></footer>
-    <OnboardingTour replay={replay} onPrepare={()=>{setView('collection');reset();setSelected(null);}} onOpenFeatured={()=>setSelected(drinks[0])}/>
+    <OnboardingTour replay={replay} onPrepare={()=>{setView('collection');reset();setSelected(null);}} onOpenFeatured={()=>setSelected(drinks[0] ?? null)}/>
     <Dialog open={selected!==null} onOpenChange={open=>{if(!open)setSelected(null);}}>{selected&&<DrinkDetails key={selected.id} drink={selected}/>}</Dialog>
   </div></MotionConfig>;
 }
 
-function DrinkCard({drink,featured,view,tour,onOpen}:{drink:Drink;featured:boolean;view:string;tour?:string;onOpen:()=>void}) {
+function DrinkCard({drink,featured,view,tour,onOpen}:{drink:Drink;featured:boolean;view:string;tour?:string|undefined;onOpen:()=>void}) {
   return <motion.div layout data-tour={tour} initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} exit={{opacity:0,scale:.97}} transition={{duration:.3}} className={`drink-tile tone-${drink.number%5} ${featured?'featured':''} ${view==='timeline'?'timeline-tile':''}`}>
     <Button variant="ghost" className="drink-card" onClick={onOpen} aria-label={`Explore ${drink.name}`}>
       <div className="tile-top"><span className="drink-category">{featured&&<span className="featured-label"><span/>THE ORIGINAL ICON</span>}{!featured&&drink.type}</span><span className="index-number">{String(drink.number).padStart(2,'0')} / 25</span></div>

@@ -237,8 +237,3 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
     </>}
   </AnimatePresence>;
 }
-
-export function useTourReplay() {
-  const [replay, setReplay] = useState(0);
-  return { replay, requestReplay: () => setReplay(r => r + 1) };
-}

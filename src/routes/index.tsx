@@ -1,11 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
-import { ArrowDown, ArrowDownUp, ArrowUpRight, Droplets, Grid2X2, List, Search, Sparkles, X, Clock3, Globe2, Leaf } from 'lucide-react';
+import { ArrowDown, ArrowDownUp, ArrowUpRight, CircleHelp, Clock3, Droplets, Globe2, Grid2X2, Leaf, List, Search, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { categories, drinks, type Drink } from '@/lib/drinks';
 import { getDrinkStory } from '@/lib/drink-story.functions';
+import { OnboardingTour } from '@/components/onboarding-tour';
 
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
@@ -25,16 +26,20 @@ function DrinksArchive() {
   const [reverse, setReverse] = useState(false);
   const [view, setView] = useState<'collection'|'timeline'>('collection');
   const [selected, setSelected] = useState<Drink|null>(null);
+  const [replay, setReplay] = useState(0);
   const filtered = useMemo(()=>drinks.filter(d => (category==='All drinks'||d.category===category) && `${d.name} ${d.country} ${d.type} ${d.year}`.toLowerCase().includes(search.toLowerCase())).sort((a,b)=>reverse ? b.year-a.year : a.year-b.year),[category,search,reverse]);
   const reset = () => {setCategory('All drinks');setSearch('');setReverse(false);};
   return <MotionConfig reducedMotion="user"><div className="archive">
     <header className="site-header page-width">
       <a href="/" className="wordmark" aria-label="Sip home"><Droplets aria-hidden="true"/>sip<span>.</span></a>
-      <nav aria-label="Archive views" className="main-nav">
+      <nav aria-label="Archive views" className="main-nav" data-tour="views">
         <Button variant="ghost" className={view==='collection'?'nav-item active':'nav-item'} onClick={()=>setView('collection')}>Collection</Button>
         <Button variant="ghost" className={view==='timeline'?'nav-item active':'nav-item'} onClick={()=>setView('timeline')}>Timeline</Button>
       </nav>
-      <span className="header-note"><span className="status-dot"/> A little history. A lot of flavor.</span>
+      <div className="header-right">
+        <Button variant="ghost" className="tour-replay" onClick={()=>setReplay(r=>r+1)}><CircleHelp size={14}/> Tour</Button>
+        <span className="header-note"><span className="status-dot"/> A little history. A lot of flavor.</span>
+      </div>
     </header>
     <main className="page-width">
       <section className="intro">

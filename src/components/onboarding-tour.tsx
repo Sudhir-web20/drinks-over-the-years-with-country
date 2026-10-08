@@ -112,7 +112,7 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
     if (phase !== 'tour' || !step?.target) { setRect(null); return; }
     const el = document.querySelector<HTMLElement>(step.target);
     if (!el) { setRect(null); return; }
-    el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    el.scrollIntoView({ block: narrow ? 'start' : 'center', inline: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     measure();
     let frame = 0;
     let frames = 0;
@@ -125,7 +125,7 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
       window.removeEventListener('scroll', measure, true);
       window.removeEventListener('resize', measure);
     };
-  }, [phase, step?.target, measure]);
+  }, [phase, step?.target, narrow, measure]);
 
   const finish = useCallback((openFeatured = false) => {
     try { localStorage.setItem(SEEN_KEY, '1'); } catch { /* storage unavailable */ }
@@ -156,10 +156,14 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const width = Math.min(372, vw - 32);
-    const left = Math.max(16, Math.min(rect.left, vw - width - 16));
-    return vh - (rect.top + rect.height) > PANEL_MIN_SPACE
-      ? { top: rect.top + rect.height + 16, left, width }
-      : { bottom: vh - rect.top + 16, left, width };
+    const sideLeft = Math.max(16, Math.min(rect.left, vw - width - 16));
+    const roomBelow = vh - (rect.top + rect.height);
+    const roomAbove = rect.top;
+    const roomRight = vw - (rect.left + rect.width);
+    if (roomBelow >= PANEL_MIN_SPACE) return { top: rect.top + rect.height + 16, left: sideLeft, width };
+    if (roomAbove >= PANEL_MIN_SPACE) return { bottom: vh - rect.top + 16, left: sideLeft, width };
+    if (roomRight >= width + 32) return { top: Math.min(Math.max(16, rect.top), vh - PANEL_MIN_SPACE), left: rect.left + rect.width + 16, width };
+    return { left: 14, right: 14, bottom: 14 };
   };
 
   const isLast = index === steps.length - 1;

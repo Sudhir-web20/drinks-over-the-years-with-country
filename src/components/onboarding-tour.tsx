@@ -199,7 +199,7 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
         aria-hidden="true"
         initial={false}
         animate={rect
-          ? { opacity: 1, top: rect.top - 10, left: rect.left - 10, width: rect.width + 20, height: rect.height + 20 }
+          ? { opacity: 1, top: rect.top, left: rect.left, width: rect.width, height: rect.height }
           : { opacity: 0, top: 0, left: 0, width: 0, height: 0 }}
         transition={{ duration: .28, ease: 'easeOut' }}
       />

@@ -2,6 +2,16 @@
 
 An interactive, animated archive of 25 of the world's most famous drinks — from Guinness (1759) to Monster Energy (2002) — with their country of origin, taste notes, little-known facts, and AI-written stories.
 
+## About
+
+Sip is a small, lovingly built archive that answers one simple question: *where did the drinks we reach for every day actually come from?*
+
+Twenty-five bottles, cans and cartons — each with the year it was born, the country that made it, what it tastes like, and a little-known detail most people have never heard. Guinness arrived in 1759, Monster Energy in 2002. Between those two dates sits a lot of history: wartime shortages, a pharmacist's failed headache cure, a Japanese doctor's gut-health mission, and a Thai bottle that gave the whole energy-drink category its name.
+
+Every drink is shown as a product photo in a curated mosaic, with animated detail cards, origin and taste notes, and a short AI-written story generated on demand and cached. Browse the collection, or switch to the timeline and watch two and a half centuries of taste unfold in order.
+
+No accounts, no tracking, no cookies — just drinks. The project is open source and built with [Lovable](https://lovable.dev).
+
 ## ✨ Features
 
 - **Curated mosaic collection** of 25 iconic drinks with product images

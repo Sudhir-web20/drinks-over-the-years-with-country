@@ -105,7 +105,8 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
     const left = Math.max(pad, box.left - pad);
     const right = Math.min(vw - pad, box.left + box.width + pad);
     const bottom = Math.min(vh - pad, box.top + box.height + pad);
-    setRect({ top, left, width: Math.max(0, right - left), height: Math.max(0, bottom - top) });
+    const next = { top, left, width: Math.max(0, right - left), height: Math.max(0, bottom - top) };
+    setRect(prev => (prev && prev.top === next.top && prev.left === next.left && prev.width === next.width && prev.height === next.height) ? prev : next);
   }, [step?.target]);
 
   useLayoutEffect(() => {
@@ -116,8 +117,7 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
     el.scrollIntoView({ block: narrow && tall ? 'start' : 'center', inline: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     measure();
     let frame = 0;
-    let frames = 0;
-    const track = () => { measure(); frames += 1; if (frames < 100) frame = requestAnimationFrame(track); };
+    const track = () => { measure(); frame = requestAnimationFrame(track); };
     frame = requestAnimationFrame(track);
     window.addEventListener('scroll', measure, true);
     window.addEventListener('resize', measure);

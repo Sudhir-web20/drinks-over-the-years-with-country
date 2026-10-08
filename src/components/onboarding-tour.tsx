@@ -55,7 +55,7 @@ function prefersReducedMotion() {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-export function OnboardingTour({ onPrepare, onOpenFeatured }: { onPrepare: () => void; onOpenFeatured: () => void }) {
+export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepare: () => void; onOpenFeatured: () => void; replay: number }) {
   const [phase, setPhase] = useState<'hidden' | 'welcome' | 'tour'>('hidden');
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
@@ -88,12 +88,10 @@ export function OnboardingTour({ onPrepare, onOpenFeatured }: { onPrepare: () =>
     setPhase('tour');
   }, []);
 
-  const replaySignalRef = useRef(0);
-  const [replay, setReplay] = useState(0);
+  const startedRef = useRef(false);
   useEffect(() => {
-    if (replaySignalRef.current === replay) return;
-    replaySignalRef.current = replay;
-    if (replay > 0) start();
+    if (!startedRef.current) { startedRef.current = true; return; }
+    start();
   }, [replay, start]);
 
   const measure = useCallback(() => {

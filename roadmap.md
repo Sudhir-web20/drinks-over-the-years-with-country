@@ -3,3 +3,4 @@
 - [x] Add Framer Motion, search, filters, sorting, and timeline view.
 - [x] Add product details with live AI stories and safe error handling.
 - [x] Verify the collection and AI detail flow.
+- [x] Add a first-visit guided tour that explains each control, with a replay button.

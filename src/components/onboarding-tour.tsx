@@ -98,7 +98,14 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
     const el = step?.target ? document.querySelector<HTMLElement>(step.target) : null;
     if (!el) { setRect(null); return; }
     const box = el.getBoundingClientRect();
-    setRect({ top: box.top, left: box.left, width: box.width, height: box.height });
+    const pad = 10;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const top = Math.max(pad, box.top - pad);
+    const left = Math.max(pad, box.left - pad);
+    const right = Math.min(vw - pad, box.left + box.width + pad);
+    const bottom = Math.min(vh - pad, box.top + box.height + pad);
+    setRect({ top, left, width: Math.max(0, right - left), height: Math.max(0, bottom - top) });
   }, [step?.target]);
 
   useLayoutEffect(() => {
@@ -194,7 +201,7 @@ export function OnboardingTour({ onPrepare, onOpenFeatured, replay }: { onPrepar
         animate={rect
           ? { opacity: 1, top: rect.top - 10, left: rect.left - 10, width: rect.width + 20, height: rect.height + 20 }
           : { opacity: 0, top: 0, left: 0, width: 0, height: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 34, mass: .7 }}
+        transition={{ duration: .28, ease: 'easeOut' }}
       />
       <div className="tour-panel" style={panelStyle()}>
         <motion.div
